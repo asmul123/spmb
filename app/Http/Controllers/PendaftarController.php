@@ -30,46 +30,52 @@ class PendaftarController extends Controller
     public function create()
     {
         $quotas = Kuota::orderBy('jalur', 'asc')->get();
-        $dataupdate = 0;
-            foreach($quotas as $quota){
-                if($quota->model_seleksi == 1){
-                    $rank_by = 'asc';
-                } else {
-                    $rank_by = 'desc';
-                }
-                $pendaftars = Pendaftar::where('jalur', $quota->jalur)->where('pilihan_diterima',$quota->program_keahlian)->orderBy('skor_akhir', $rank_by)->get();
-                $ranking = 1;
-                foreach($pendaftars as $pendaftar){
-                    if($ranking <= $quota->kuota_pelimpahan){
-                        $pilihan_ke = $pendaftar->pilihan_ke;
-                        $pilihan_diterima = $pendaftar->pilihan_diterima;
-                        $skor_akhir = $pendaftar->skor_akhir;
+        $proses = 1;
+        $update = 0;
+        while($proses != 0){
+            $dataupdate = 0;
+                foreach($quotas as $quota){
+                    if($quota->model_seleksi == 1){
+                        $rank_by = 'asc';
                     } else {
-                        $pilihan_ke = $pendaftar->pilihan_ke + 1;
-                        if($pilihan_ke == 2){
-                            $pilihan_diterima = $pendaftar->pilihan_2;
-                            $skor_akhir = $pendaftar->skor_pilihan_2;
-                        } else {
-                            $pilihan_diterima = "Tidak Diterima";
+                        $rank_by = 'desc';
+                    }
+                    $pendaftars = Pendaftar::where('jalur', $quota->jalur)->where('pilihan_diterima',$quota->program_keahlian)->orderBy('skor_akhir', $rank_by)->get();
+                    $ranking = 1;
+                    foreach($pendaftars as $pendaftar){
+                        if($ranking <= $quota->kuota_pelimpahan){
+                            $pilihan_ke = $pendaftar->pilihan_ke;
+                            $pilihan_diterima = $pendaftar->pilihan_diterima;
                             $skor_akhir = $pendaftar->skor_akhir;
+                        } else {
+                            $pilihan_ke = $pendaftar->pilihan_ke + 1;
+                            if($pilihan_ke == 2){
+                                $pilihan_diterima = $pendaftar->pilihan_2;
+                                $skor_akhir = $pendaftar->skor_pilihan_2;
+                            } else {
+                                $pilihan_diterima = "Tidak Diterima";
+                                $skor_akhir = $pendaftar->skor_akhir;
+                            }
                         }
+                        if ($pendaftar->pilihan_ke != $pilihan_ke){
+                            $data = ([
+                                'pilihan_ke' => $pilihan_ke,
+                                'pilihan_diterima' => $pilihan_diterima,
+                                'skor_akhir' => $skor_akhir
+                            ]);
+                            Pendaftar::where('id', $pendaftar->id)
+                                    ->update($data);
+                                    $dataupdate++;
+                        }
+                        $ranking++;
+                        // echo $pendaftar->id."-".$pendaftar->jalur."-".$quota->kuota_pelimpahan."-".$pilihan_ke."-".$pilihan_diterima."<br>";
                     }
-                    if ($pendaftar->pilihan_ke != $pilihan_ke){
-                        $data = ([
-                            'pilihan_ke' => $pilihan_ke,
-                            'pilihan_diterima' => $pilihan_diterima,
-                            'skor_akhir' => $skor_akhir
-                        ]);
-                        Pendaftar::where('id', $pendaftar->id)
-                                ->update($data);
-                                $dataupdate++;
-                    }
-                    $ranking++;
-                    // echo $pendaftar->id."-".$pendaftar->jalur."-".$quota->kuota_pelimpahan."-".$pilihan_ke."-".$pilihan_diterima."<br>";
                 }
-            }
+            $update++;
+            $proses = $dataupdate;
+        }
                     
-        return redirect()->back()->with('success', $dataupdate . ' Pendaftar mengalami perubahan ');
+        return redirect()->back()->with('success', $update . ' Proses seleksi telah dilakukan ');
     }
 
     /**
