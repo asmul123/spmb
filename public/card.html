@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in - Voler Admin Dashboard</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.css" />
+
+    <link
+      rel="shortcut icon"
+      href="assets/images/logosmk1.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="assets/css/app.css" />
+  </head>
+
+  <body>
+    <div id="auth">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-5 col-sm-12 mx-auto">
+            <div class="card pt-4">
+              <div class="card-body">
+                <div class="text-center mb-5">
+                  <img
+                    src="assets/images/logosmk1.png"
+                    height="100"
+                    class="mb-4"
+                  />
+                  <h3>KARTU AKUN</h3>
+                  <p>
+                    Penilaian Tengah Semester Ganjil<br />
+                    <sup>Tahun Pelajaran 2024/2025</sup>
+                  </p>
+                </div>
+                <form action="index.html">
+                  <div class="form-group position-relative has-icon-left">
+                    <label for="username">Nama Peserta</label>
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="username"
+                        disabled
+                        value="email@akun.smk"
+                      />
+                      <div class="form-control-icon">
+                        <i data-feather="user"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group position-relative has-icon-left">
+                    <label for="username">Nomor Peserta</label>
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="username"
+                        disabled
+                        value="email@akun.smk"
+                      />
+                      <div class="form-control-icon">
+                        <i data-feather="user"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group position-relative has-icon-left">
+                    <label for="username">Kelas</label>
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="username"
+                        disabled
+                        value="email@akun.smk"
+                      />
+                      <div class="form-control-icon">
+                        <i data-feather="user"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group position-relative has-icon-left">
+                    <label for="username">Ruang</label>
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="username"
+                        disabled
+                        value="email@akun.smk"
+                      />
+                      <div class="form-control-icon">
+                        <i data-feather="user"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group position-relative has-icon-left">
+                    <label for="username">Email Pengguna</label>
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="username"
+                        disabled
+                        value="email@akun.smk"
+                      />
+                      <div class="form-control-icon">
+                        <i data-feather="user"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group position-relative has-icon-left">
+                    <div class="clearfix">
+                      <label for="password">Kata Sandi</label>
+                    </div>
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="password"
+                        disabled
+                        value="password"
+                      />
+                      <div class="form-control-icon">
+                        <i data-feather="lock"></i>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <button
+                      class="btn btn-block mb-2 btn-outline-primary"
+                      data-toggle="modal"
+                      data-target="#panduan"
+                    >
+                      <i data-feather="navigation"></i> Panduan Masuk Ms.Teams
+                    </button>
+                  </div>
+                  <div class="col-sm-12">
+                    <button
+                      class="btn btn-block mb-2 btn-outline-success"
+                      data-toggle="modal"
+                      data-target="#link"
+                    >
+                      <i data-feather="download"></i> Download Ms.Teams
+                    </button>
+                  </div>
+
+                  <!--login form Modal -->
+                  <div
+                    class="modal fade text-left"
+                    id="link"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="myModalLabel33"
+                    aria-hidden="true"
+                  >
+                    <div
+                      class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                      role="document"
+                    >
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title" id="myModalLabel33">
+                            Unduh Ms.Teams disini
+                          </h4>
+                          <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <i data-feather="x"></i>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <a
+                            href="https://play.google.com/store/apps/details?id=com.microsoft.teams&hl=id"
+                            target="_blank"
+                          >
+                            <img
+                              src="assets/images/play.png"
+                              width="45%"
+                              class="mb-4"
+                            />
+                          </a>
+                          <a
+                            href="https://apps.apple.com/us/app/microsoft-teams/id1113153706"
+                            target="_blank"
+                          >
+                            <img
+                              src="assets/images/app.png"
+                              width="45%"
+                              class="mb-4 float-right"
+                            />
+                          </a>
+                        </div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            data-dismiss="modal"
+                          >
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Close</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="modal fade text-left"
+                    id="panduan"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="myModalLabel33"
+                    aria-hidden="true"
+                  >
+                    <div
+                      class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                      role="document"
+                    >
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title" id="myModalLabel33">
+                            Panduan Menggunakan Ms.Teams
+                          </h4>
+                          <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <i data-feather="x"></i>
+                          </button>
+                        </div>
+                        <div class="modal-body">Berikut panduannya</div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            data-dismiss="modal"
+                          >
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Close</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="assets/js/feather-icons/feather.min.js"></script>
+    <script src="assets/js/app.js"></script>
+
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>

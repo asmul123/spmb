@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login - Tokopedia Clone</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            body {
+                background-color: #f5f5f5;
+                font-family: "Segoe UI", sans-serif;
+            }
+
+            .login-container {
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .login-card {
+                width: 100%;
+                max-width: 400px;
+                padding: 2rem;
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .tokopedia-logo {
+                width: 150px;
+                display: block;
+                margin: 0 auto 1.5rem;
+            }
+
+            .form-control:focus {
+                box-shadow: none;
+                border-color: #03ac0e;
+            }
+
+            .btn-tokopedia {
+                background-color: #03ac0e;
+                color: white;
+                border: none;
+            }
+
+            .btn-tokopedia:hover {
+                background-color: #02950c;
+            }
+
+            .form-footer {
+                font-size: 0.9rem;
+                text-align: center;
+                margin-top: 1rem;
+            }
+
+            .form-footer a {
+                text-decoration: none;
+                color: #03ac0e;
+            }
+
+            .form-footer a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <div class="login-card">
+                <img
+                    src="https://p16-images-comn-sg.tokopedia-static.net/tos-alisg-i-zr7vqa5nfb-sg/img/oauth/background/tkp-logo.png~tplv-zr7vqa5nfb-image.image"
+                    alt="Tokopedia Logo"
+                    class="tokopedia-logo"
+                />
+                <h5 class="text-center mb-4">Masuk ke Tokopedia</h5>
+                <form>
+                    <div class="mb-3">
+                        <label for="email" class="form-label"
+                            >Nomor HP atau Email</label
+                        >
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="email"
+                            placeholder="Contoh: email@tokopedia.com"
+                            required
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label"
+                            >Kata Sandi</label
+                        >
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="password"
+                            placeholder="Masukkan kata sandi"
+                            required
+                        />
+                    </div>
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-tokopedia">
+                            Masuk
+                        </button>
+                    </div>
+                    <div class="text-center mb-2">
+                        <a href="#">Lupa kata sandi?</a>
+                    </div>
+                    <div class="form-footer">
+                        Belum punya akun Tokopedia? <a href="#">Daftar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
