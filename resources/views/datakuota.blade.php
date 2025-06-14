@@ -160,6 +160,7 @@
                             <th>Program Keahlian</th>
                             <th>Kuota Asal</th>
                             <th>Kuota Pelimpahan</th>
+                            <th>Pendaftar Pilihan 1</th>
                             <th>Jumlah Diterima</th>
                             <th>Passing Grade</th>
                         </tr>
@@ -172,6 +173,7 @@
                             } else {
                                 $rank_by = 'asc';
                             }
+                            $pilihan_1 = App\Models\Pendaftar::where('jalur', $kuota->jalur)->where('pilihan_1', $kuota->program_keahlian)->count();
                             $pendaftar = App\Models\Pendaftar::where('jalur', $kuota->jalur)->where('pilihan_diterima', $kuota->program_keahlian)->orderBy('skor_akhir', $rank_by);
                             $jumlah_pendaftar = $pendaftar->count();
                             if($jumlah_pendaftar != 0){
@@ -186,6 +188,7 @@
                             <td>{{ $kuota->program_keahlian }}</td>
                             <td>{{ $kuota->kuota }}</td>
                             <td>{{ $kuota->kuota_pelimpahan }}</td>
+                            <td>{{ $pilihan_1 }}</td>
                             <td>{{ $jumlah_pendaftar }}</td>
                             <td>{{ $pg }}</td>
                         </tr>
