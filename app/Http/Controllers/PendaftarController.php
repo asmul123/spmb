@@ -193,14 +193,6 @@ class PendaftarController extends Controller
     {
         $quotas = Kuota::all();
         $pendaftars = Pendaftar::all();
-            foreach($quotas as $quota){
-                $data = ([
-                    'kuota_pelimpahan' => $quota->kuota,
-                    'status_pelimpahan' => 0
-                ]);
-                Kuota::where('id', $quota->id)
-                        ->update($data);
-            }            
         if(request('act')=='reset'){
             foreach($pendaftars as $pend){
                 $data = ([
@@ -209,10 +201,18 @@ class PendaftarController extends Controller
                     'skor_akhir' => $pend->skor_pilihan_1
                 ]);
                 Pendaftar::where('id', $pend->id)
-                        ->update($data);
+                ->update($data);
             }            
             return redirect()->back()->with('success', 'Data Telah di Reset');
         } else if (request('act')=='delete'){
+            foreach($quotas as $quota){
+                $data = ([
+                    'kuota_pelimpahan' => $quota->kuota,
+                    'status_pelimpahan' => 0
+                ]);
+                Kuota::where('id', $quota->id)
+                        ->update($data);
+            }            
             Pendaftar::truncate();
             return redirect()->back()->with('success', 'Data Telah di Hapus');
         }
