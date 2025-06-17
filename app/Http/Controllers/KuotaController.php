@@ -31,6 +31,7 @@ class KuotaController extends Controller
     public function create()
     {
         $programs = Program::all();
+        $melimpah = 0;
         foreach($programs as $program){
             $kuota_mutasi = Kuota::where('jalur', 'MUTASI')->where('program_keahlian', $program->program_keahlian)->first();
             $kuota_pelimpahan_mutasi = $kuota_mutasi->kuota_pelimpahan;
@@ -39,7 +40,9 @@ class KuotaController extends Controller
                 $status_kuota_mutasi = "lebih";
                 $kelebihan_kuota_mutasi = $kuota_pelimpahan_mutasi - $pendaftar_mutasi;
             } else {
-                if($kuota_pelimpahan_mutasi == 0){
+                $cek_pendaftar_tidakditerima_mutasi = Pendaftar::where('jalur', 'MUTASI')->where('pilihan_diterima', '<>', $program->program_keahlian)
+                                                ->where('pilihan_1',$program->program_keahlian)->orwhere('pilihan_2',$program->program_keahlian)->where('jalur', 'MUTASI')->where('pilihan_diterima', 'Tidak Diterima')->count();
+                if($cek_pendaftar_tidakditerima_mutasi == 0){
                 $status_kuota_mutasi = "pas";
                 } else {
                 $status_kuota_mutasi = "kurang";
@@ -52,7 +55,10 @@ class KuotaController extends Controller
                 $status_kuota_anakguru = "lebih";
                 $kelebihan_kuota_anakguru = $kuota_pelimpahan_anakguru - $pendaftar_anakguru;
             } else {
-                if($kuota_pelimpahan_anakguru == 0){
+                $cek_pendaftar_tidakditerima_anakguru = Pendaftar::where('jalur', 'ANAK GURU')->where('pilihan_diterima', '<>', $program->program_keahlian)
+                                                ->where('pilihan_1',$program->program_keahlian)->orwhere('pilihan_2',$program->program_keahlian)->where('jalur', 'ANAK GURU')->where('pilihan_diterima', 'Tidak Diterima')->count();
+                
+                if($cek_pendaftar_tidakditerima_anakguru == 0){
                 $status_kuota_anakguru = "pas";
                 } else {
                 $status_kuota_anakguru = "kurang";
@@ -65,7 +71,9 @@ class KuotaController extends Controller
                 $status_kuota_domisili = "lebih";
                 $kelebihan_kuota_domisili = $kuota_pelimpahan_domisili - $pendaftar_domisili;                
             } else {
-                if($kuota_pelimpahan_domisili == 0){
+                $cek_pendaftar_tidakditerima_domisili = Pendaftar::where('jalur', 'DOMISILI TERDEKAT')->where('pilihan_diterima', '<>', $program->program_keahlian)
+                                                ->where('pilihan_1',$program->program_keahlian)->orwhere('pilihan_2',$program->program_keahlian)->where('jalur', 'DOMISILI TERDEKAT')->where('pilihan_diterima', 'Tidak Diterima')->count();
+                if($cek_pendaftar_tidakditerima_domisili == 0){
                 $status_kuota_domisili = "pas";
                 } else {
                 $status_kuota_domisili = "kurang";
@@ -93,7 +101,7 @@ class KuotaController extends Controller
                         ]);
                         Kuota::where('id', $kuota_anakguru->id)
                                 ->update($data);
-                        echo $program->program_keahlian."MLALDK<br>";
+                        $melimpah++;
                     }
                 } else if($status_kuota_domisili == "lebih") {
                     if($status_kuota_anakguru == "kurang"){
@@ -116,7 +124,7 @@ class KuotaController extends Controller
                         ]);
                         Kuota::where('id', $kuota_domisili->id)
                                 ->update($data);
-                        echo $program->program_keahlian."MLAKDL<br>";
+                                $melimpah++;;
                     }
                 } else if($status_kuota_anakguru == "kurang"){
                     $kuota_dilimpahkan = $kelebihan_kuota_mutasi + $kuota_pelimpahan_anakguru;
@@ -132,7 +140,7 @@ class KuotaController extends Controller
                     ]);
                     Kuota::where('id', $kuota_mutasi->id)
                             ->update($data);
-                    echo $program->program_keahlian."MLAKTD<br>";                        
+                            $melimpah++;;                        
                 }
             } else if ($status_kuota_anakguru == "lebih"){
                 if($status_kuota_mutasi == "kurang"){
@@ -149,7 +157,7 @@ class KuotaController extends Controller
                     ]);
                     Kuota::where('id', $kuota_anakguru->id)
                             ->update($data);
-                    echo $program->program_keahlian."MKALTD<br>";  
+                            $melimpah++;;  
                 } else if ($status_kuota_domisili == "kurang"){
                     $kuota_dilimpahkan = $kelebihan_kuota_anakguru + $kuota_pelimpahan_domisili;
                     $data = ([
@@ -164,7 +172,7 @@ class KuotaController extends Controller
                     ]);
                     Kuota::where('id', $kuota_anakguru->id)
                             ->update($data);
-                    echo $program->program_keahlian."MPALDK<br>";  
+                            $melimpah++;;  
                 }
             }
 
@@ -202,7 +210,7 @@ class KuotaController extends Controller
                     ]);
                     Kuota::where('id', $kuota_mbk->id)
                             ->update($data);
-                    echo $program->program_keahlian."MBLKEK<br>";
+                            $melimpah++;;
             } else if ($status_kuota_ketm == "lebih" and $status_kuota_mbk == "kurang"){
                 $kuota_dilimpahkan = $kelebihan_kuota_ketm + $kuota_pelimpahan_mbk;
                     $data = ([
@@ -217,9 +225,10 @@ class KuotaController extends Controller
                     ]);
                     Kuota::where('id', $kuota_ketm->id)
                             ->update($data);
-                    echo $program->program_keahlian."MBKKEL<br>";
+                            $melimpah++;;
             }
         }
+        echo $melimpah." Kuota terlimpah";
 
     }
 
