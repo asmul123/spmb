@@ -13,6 +13,8 @@ class Pendaftar extends Model
         'nomor_pendaftaran',
         'nisn',
         'nama',
+        'tempat_lahir',
+        'tanggal_lahir',
         'asal_sekolah',
         'jalur',
         'pilihan_1',

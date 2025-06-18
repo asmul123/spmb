@@ -54,7 +54,7 @@ class PendaftarController extends Controller
                         } else {
                             $rank_by = 'desc';
                         }
-                        $pendaftars = Pendaftar::where('jalur', $quota->jalur)->where('pilihan_diterima',$quota->program_keahlian)->orderBy('skor_akhir', $rank_by)->get();
+                        $pendaftars = Pendaftar::where('jalur', $quota->jalur)->where('pilihan_diterima',$quota->program_keahlian)->orderBy('skor_akhir', $rank_by)->orderBy('tanggal_lahir', 'asc')->get();
                         $ranking = 1;
                         foreach($pendaftars as $pendaftar){
                             if($ranking <= $quota->kuota_pelimpahan){
@@ -312,19 +312,19 @@ class PendaftarController extends Controller
         foreach ($sheet->getRowIterator() as $row) {
             $no = $sheet->getCell('A'.$i)->getValue();
             if (is_numeric($no)){
-                    $nomor_pendaftaran = $sheet->getCell('C'.$i)->getValue();
-                    $nisn = $sheet->getCell('D'.$i)->getValue();
-                    $nama = $sheet->getCell('E'.$i)->getValue();
-                    $asal_sekolah = $sheet->getCell('F'.$i)->getValue();
-                    $pil_1 = $sheet->getCell('G'.$i)->getValue();
-                    $pil_2 = $sheet->getCell('H'.$i)->getValue();
-                    $pil_3 = $sheet->getCell('I'.$i)->getValue();
+                    $nomor_pendaftaran = $sheet->getCell('N'.$i)->getValue();
+                    $nisn = $sheet->getCell('O'.$i)->getValue();
+                    $nama = $sheet->getCell('R'.$i)->getValue();
+                    $asal_sekolah = $sheet->getCell('S'.$i)->getValue();
+                    $pil_1 = $sheet->getCell('T'.$i)->getValue();
+                    $pil_2 = $sheet->getCell('V'.$i)->getValue();
+                    $pil_3 = $sheet->getCell('X'.$i)->getValue();
                     $p_1 = explode(" - ", $pil_1);
                     $p_2 = explode(" - ", $pil_2);
                     $p_3 = explode(" - ", $pil_3);
                     $jalur = $p_1[2];
                     $pilihan_1 = $p_1[1];
-                    if($pil_2 != "-"){
+                    if($pil_2 != ""){
                         if($p_2[0] != "SMKN 1 GARUT"){
                             $pilihan_2 = $p_2[0]." - ".$p_2[1];
                         } else {
@@ -333,7 +333,7 @@ class PendaftarController extends Controller
                     } else {
                         $pilihan_2 = "-";
                     }
-                    if($pil_3 != "-"){
+                    if($pil_3 != ""){
                         if($p_3[0] != "SMKN 1 GARUT"){
                             $pilihan_3 = $p_3[0]." - ".$p_3[1];
                         } else {
@@ -342,40 +342,56 @@ class PendaftarController extends Controller
                     } else {
                         $pilihan_3 = "-";
                     }
-                    $skor_1 = explode (" ",$sheet->getCell('K'.$i)->getValue());
-                    $skor_2 = explode (" ",$sheet->getCell('K'.$i+1)->getValue());
-                    $skor_3 = explode (" ",$sheet->getCell('K'.$i+2)->getValue());
-                    if(count($skor_1) >= 3){
-                        if ($p_1[2] =="PERSIAPAN KELAS INDUSTRI"){
-                            $skor_pilihan_1 = $skor_1[3];
-                        } else {
-                            $skor_pilihan_1 = $skor_1[2];
-                        }
-                    } else {
+                    // $skor_1 = explode (" ",$sheet->getCell('K'.$i)->getValue());
+                    // $skor_2 = explode (" ",$sheet->getCell('K'.$i+1)->getValue());
+                    // $skor_3 = explode (" ",$sheet->getCell('K'.$i+2)->getValue());
+                    // if(count($skor_1) >= 3){
+                    //     if ($p_1[2] =="PERSIAPAN KELAS INDUSTRI"){
+                    //         $skor_pilihan_1 = $skor_1[3];
+                    //     } else {
+                    //         $skor_pilihan_1 = $skor_1[2];
+                    //     }
+                    // } else {
+                    //     $skor_pilihan_1 = 0;
+                    // }
+                    // if(count($skor_2) >= 3){
+                        //     if ($p_1[2] =="PERSIAPAN KELAS INDUSTRI"){
+                            //         $skor_pilihan_2 = $skor_2[3];
+                            //     } else {
+                                //         $skor_pilihan_2 = $skor_2[2];
+                                //     }
+                                // } else {
+                                    //     $skor_pilihan_2 = 0;
+                                    // }
+                                    // if(count($skor_3) >= 3){
+                                        //     if ($p_1[2] =="PERSIAPAN KELAS INDUSTRI"){
+                                            //         $skor_pilihan_3 = $skor_3[3];
+                                            //     } else {
+                                                //         $skor_pilihan_3 = $skor_3[2];
+                                                //     }
+                                                // } else {
+                                                    //     $skor_pilihan_3 = 0;
+                    // }
+                    $tempat_lahir = $sheet->getCell('AA'.$i)->getValue();
+                    $tanggal_lahir = $sheet->getCell('AB'.$i)->getValue();
+                    $skor_pilihan_1 = $sheet->getCell('U'.$i)->getValue();
+                    if($skor_pilihan_1 == ""){
                         $skor_pilihan_1 = 0;
                     }
-                    if(count($skor_2) >= 3){
-                        if ($p_1[2] =="PERSIAPAN KELAS INDUSTRI"){
-                            $skor_pilihan_2 = $skor_2[3];
-                        } else {
-                            $skor_pilihan_2 = $skor_2[2];
-                        }
-                    } else {
+                    $skor_pilihan_2 = $sheet->getCell('W'.$i)->getValue();
+                    if($skor_pilihan_2 == ""){
                         $skor_pilihan_2 = 0;
                     }
-                    if(count($skor_3) >= 3){
-                        if ($p_1[2] =="PERSIAPAN KELAS INDUSTRI"){
-                            $skor_pilihan_3 = $skor_3[3];
-                        } else {
-                            $skor_pilihan_3 = $skor_3[2];
-                        }
-                    } else {
+                    $skor_pilihan_3 = $sheet->getCell('Y'.$i)->getValue();
+                    if($skor_pilihan_3 == ""){
                         $skor_pilihan_3 = 0;
                     }
                     $data = ([
                         'nomor_pendaftaran' => $nomor_pendaftaran,
                         'nisn' => $nisn,
                         'nama' => $nama,
+                        'tempat_lahir' => $tempat_lahir,
+                        'tanggal_lahir' => $tanggal_lahir,
                         'asal_sekolah' => $asal_sekolah,
                         'jalur' => $jalur,
                         'pilihan_1' => $pilihan_1,
