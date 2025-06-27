@@ -15,7 +15,7 @@ class PendaftarController extends Controller
      */
     public function index()
     {        
-        $pendaftars = Pendaftar::orderBy('jalur', 'asc')->orderBy('pilihan_diterima', 'asc')->orderBy('skor_akhir', 'asc')->get();
+        $pendaftars = Pendaftar::orderBy('jalur', 'asc')->orderBy('pilihan_diterima', 'asc')->orderBy('skor_akhir', 'desc')->get();
 
         return view('datapendaftar', [
             'menu' => 'data-spmb',
@@ -91,207 +91,334 @@ class PendaftarController extends Controller
             $programs = Program::all();
             $melimpah = 0;
             foreach($programs as $program){
-                $kuota_mutasi = Kuota::where('jalur', 'MUTASI')->where('program_keahlian', $program->program_keahlian)->first();
-                $kuota_pelimpahan_mutasi = $kuota_mutasi->kuota_pelimpahan;
-                $pendaftar_mutasi = Pendaftar::where('jalur', 'MUTASI')->where('pilihan_diterima', $program->program_keahlian)->count();
-                if($kuota_pelimpahan_mutasi > $pendaftar_mutasi){
-                    $status_kuota_mutasi = "lebih";
-                    $kelebihan_kuota_mutasi = $kuota_pelimpahan_mutasi - $pendaftar_mutasi;
-                } else {
-                    $cek_pendaftar_tidakditerima_mutasi = Pendaftar::where('jalur', 'MUTASI')->where('pilihan_diterima', '<>', $program->program_keahlian)
-                                                    ->where('pilihan_1',$program->program_keahlian)->orwhere('pilihan_2',$program->program_keahlian)->where('jalur', 'MUTASI')->where('pilihan_diterima', 'Tidak Diterima')->count();
-                    if($cek_pendaftar_tidakditerima_mutasi == 0){
-                    $status_kuota_mutasi = "pas";
-                    } else {
-                    $status_kuota_mutasi = "kurang";
-                    }
-                }
-                $kuota_anakguru = Kuota::where('jalur', 'ANAK GURU')->where('program_keahlian', $program->program_keahlian)->first();
-                $kuota_pelimpahan_anakguru = $kuota_anakguru->kuota_pelimpahan;
-                $pendaftar_anakguru = Pendaftar::where('jalur', 'ANAK GURU')->where('pilihan_diterima', $program->program_keahlian)->count();
-                if($kuota_pelimpahan_anakguru > $pendaftar_anakguru){
-                    $status_kuota_anakguru = "lebih";
-                    $kelebihan_kuota_anakguru = $kuota_pelimpahan_anakguru - $pendaftar_anakguru;
-                } else {
-                    $cek_pendaftar_tidakditerima_anakguru = Pendaftar::where('jalur', 'ANAK GURU')->where('pilihan_diterima', '<>', $program->program_keahlian)
-                    ->where('pilihan_1',$program->program_keahlian)->orwhere('pilihan_2',$program->program_keahlian)->where('jalur', 'ANAK GURU')->where('pilihan_diterima', 'Tidak Diterima')->count();
+                // $kuota_mutasi = Kuota::where('jalur', 'MUTASI')->where('program_keahlian', $program->program_keahlian)->first();
+                // $kuota_pelimpahan_mutasi = $kuota_mutasi->kuota_pelimpahan;
+                // $pendaftar_mutasi = Pendaftar::where('jalur', 'MUTASI')->where('pilihan_diterima', $program->program_keahlian)->count();
+                // if($kuota_pelimpahan_mutasi > $pendaftar_mutasi){
+                //     $status_kuota_mutasi = "lebih";
+                //     $kelebihan_kuota_mutasi = $kuota_pelimpahan_mutasi - $pendaftar_mutasi;
+                // } else {
+                //     $cek_pendaftar_tidakditerima_mutasi = Pendaftar::where('jalur', 'MUTASI')->where('pilihan_diterima', '<>', $program->program_keahlian)
+                //                                     ->where('pilihan_1',$program->program_keahlian)->orwhere('pilihan_2',$program->program_keahlian)->where('jalur', 'MUTASI')->where('pilihan_diterima', 'Tidak Diterima')->count();
+                //     if($cek_pendaftar_tidakditerima_mutasi == 0){
+                //     $status_kuota_mutasi = "pas";
+                //     } else {
+                //     $status_kuota_mutasi = "kurang";
+                //     }
+                // }
+                // $kuota_anakguru = Kuota::where('jalur', 'ANAK GURU')->where('program_keahlian', $program->program_keahlian)->first();
+                // $kuota_pelimpahan_anakguru = $kuota_anakguru->kuota_pelimpahan;
+                // $pendaftar_anakguru = Pendaftar::where('jalur', 'ANAK GURU')->where('pilihan_diterima', $program->program_keahlian)->count();
+                // if($kuota_pelimpahan_anakguru > $pendaftar_anakguru){
+                //     $status_kuota_anakguru = "lebih";
+                //     $kelebihan_kuota_anakguru = $kuota_pelimpahan_anakguru - $pendaftar_anakguru;
+                // } else {
+                //     $cek_pendaftar_tidakditerima_anakguru = Pendaftar::where('jalur', 'ANAK GURU')->where('pilihan_diterima', '<>', $program->program_keahlian)
+                //     ->where('pilihan_1',$program->program_keahlian)->orwhere('pilihan_2',$program->program_keahlian)->where('jalur', 'ANAK GURU')->where('pilihan_diterima', 'Tidak Diterima')->count();
                     
-                    if($cek_pendaftar_tidakditerima_anakguru == 0){
-                        $status_kuota_anakguru = "pas";
-                        $kelebihan_kuota_anakguru = 0;
+                //     if($cek_pendaftar_tidakditerima_anakguru == 0){
+                //         $status_kuota_anakguru = "pas";
+                //         $kelebihan_kuota_anakguru = 0;
+                //     } else {
+                //     $status_kuota_anakguru = "kurang";
+                //     }
+                // }
+                // $kuota_domisili = Kuota::where('jalur', 'DOMISILI TERDEKAT')->where('program_keahlian', $program->program_keahlian)->first();
+                // $kuota_pelimpahan_domisili = $kuota_domisili->kuota_pelimpahan;
+                // $pendaftar_domisili = Pendaftar::where('jalur', 'DOMISILI TERDEKAT')->where('pilihan_diterima', $program->program_keahlian)->count();
+                // if($kuota_pelimpahan_domisili > $pendaftar_domisili){
+                //     $status_kuota_domisili = "lebih";
+                //     $kelebihan_kuota_domisili = $kuota_pelimpahan_domisili - $pendaftar_domisili;                
+                // } else {
+                //     $cek_pendaftar_tidakditerima_domisili = Pendaftar::where('jalur', 'DOMISILI TERDEKAT')->where('pilihan_diterima', '<>', $program->program_keahlian)
+                //                                     ->where('pilihan_1',$program->program_keahlian)->orwhere('pilihan_2',$program->program_keahlian)->where('jalur', 'DOMISILI TERDEKAT')->where('pilihan_diterima', 'Tidak Diterima')->count();
+                //     if($cek_pendaftar_tidakditerima_domisili == 0){
+                //     $status_kuota_domisili = "pas";
+                //     } else {
+                //     $status_kuota_domisili = "kurang";
+                //     }
+                // }
+                // if ($status_kuota_mutasi == "lebih"){
+                //     if($status_kuota_anakguru == "lebih" or $status_kuota_anakguru == "pas"){
+                //         if($status_kuota_domisili == "kurang"){
+                //             $kuota_dilimpahkan = $kelebihan_kuota_mutasi + $kelebihan_kuota_anakguru + $kuota_pelimpahan_domisili;
+                //             $data = ([
+                //                 'kuota_pelimpahan' => $kuota_dilimpahkan,
+                //                 'status_pelimpahan' => 1
+                //             ]);
+                //             Kuota::where('id', $kuota_domisili->id)
+                //                     ->update($data);
+                //             $data = ([
+                //                 'kuota_pelimpahan' => $pendaftar_mutasi,
+                //                 'status_pelimpahan' => 2
+                //             ]);
+                //             Kuota::where('id', $kuota_mutasi->id)
+                //                     ->update($data);
+                //                     $data = ([
+                //                 'kuota_pelimpahan' => $pendaftar_anakguru,
+                //                 'status_pelimpahan' => 2
+                //             ]);
+                //             Kuota::where('id', $kuota_anakguru->id)
+                //                     ->update($data);
+                //             $melimpah++;
+                //         }
+                //     } else if($status_kuota_domisili == "lebih") {
+                //         if($status_kuota_anakguru == "kurang"){
+                //             $kuota_dilimpahkan = $kelebihan_kuota_mutasi + $kelebihan_kuota_domisili + $kuota_pelimpahan_anakguru;
+                //             $data = ([
+                //                 'kuota_pelimpahan' => $kuota_dilimpahkan,
+                //                 'status_pelimpahan' => 1
+                //             ]);
+                //             Kuota::where('id', $kuota_anakguru->id)
+                //                     ->update($data);
+                //             $data = ([
+                //                 'kuota_pelimpahan' => $pendaftar_mutasi,
+                //                 'status_pelimpahan' => 2
+                //             ]);
+                //             Kuota::where('id', $kuota_mutasi->id)
+                //                     ->update($data);
+                //             $data = ([
+                //                 'kuota_pelimpahan' => $pendaftar_domisili,
+                //                 'status_pelimpahan' => 2
+                //             ]);
+                //             Kuota::where('id', $kuota_domisili->id)
+                //                     ->update($data);
+                //                     $melimpah++;;
+                //         }
+                //     } else if($status_kuota_anakguru == "kurang"){
+                //         $kuota_dilimpahkan = $kelebihan_kuota_mutasi + $kuota_pelimpahan_anakguru;
+                //         $data = ([
+                //             'kuota_pelimpahan' => $kuota_dilimpahkan,
+                //             'status_pelimpahan' => 1
+                //         ]);
+                //         Kuota::where('id', $kuota_anakguru->id)
+                //         ->update($data);
+                //         $data = ([
+                //             'kuota_pelimpahan' => $pendaftar_mutasi,
+                //             'status_pelimpahan' => 2
+                //         ]);
+                //         Kuota::where('id', $kuota_mutasi->id)
+                //                 ->update($data);
+                //                 $melimpah++;;                        
+                //     }
+                // } else if ($status_kuota_anakguru == "lebih"){
+                //     if($status_kuota_mutasi == "kurang"){
+                //         $kuota_dilimpahkan = $kelebihan_kuota_anakguru + $kuota_pelimpahan_mutasi;
+                //         $data = ([
+                //             'kuota_pelimpahan' => $kuota_dilimpahkan,
+                //             'status_pelimpahan' => 1
+                //         ]);
+                //         Kuota::where('id', $kuota_mutasi->id)
+                //         ->update($data);
+                //         $data = ([
+                //             'kuota_pelimpahan' => $pendaftar_anakguru,
+                //             'status_pelimpahan' => 2
+                //         ]);
+                //         Kuota::where('id', $kuota_anakguru->id)
+                //                 ->update($data);
+                //                 $melimpah++;;  
+                //     } else if ($status_kuota_domisili == "kurang"){
+                //         $kuota_dilimpahkan = $kelebihan_kuota_anakguru + $kuota_pelimpahan_domisili;
+                //         $data = ([
+                //             'kuota_pelimpahan' => $kuota_dilimpahkan,
+                //             'status_pelimpahan' => 1
+                //         ]);
+                //         Kuota::where('id', $kuota_domisili->id)
+                //         ->update($data);
+                //         $data = ([
+                //             'kuota_pelimpahan' => $pendaftar_anakguru,
+                //             'status_pelimpahan' => 2
+                //         ]);
+                //         Kuota::where('id', $kuota_anakguru->id)
+                //                 ->update($data);
+                //                 $melimpah++;;  
+                //     }
+                // }
+
+                // $kuota_mbk = Kuota::where('jalur', 'MURID BERKEBUTUHAN KHUSUS')->where('program_keahlian', $program->program_keahlian)->first();
+                // $kuota_pelimpahan_mbk = $kuota_mbk->kuota_pelimpahan;
+                // $pendaftar_mbk = Pendaftar::where('jalur', 'MURID BERKEBUTUHAN KHUSUS')->where('pilihan_diterima', $program->program_keahlian)->count();
+                // if($kuota_pelimpahan_mbk > $pendaftar_mbk){
+                //     $status_kuota_mbk = "lebih";
+                //     $kelebihan_kuota_mbk = $kuota_pelimpahan_mbk - $pendaftar_mbk;
+                // } else {
+                //     $status_kuota_mbk = "kurang";
+                // }
+
+                // $kuota_ketm = Kuota::where('jalur', 'KETM')->where('program_keahlian', $program->program_keahlian)->first();
+                // $kuota_pelimpahan_ketm = $kuota_ketm->kuota_pelimpahan;
+                // $pendaftar_ketm = Pendaftar::where('jalur', 'KETM')->where('pilihan_diterima', $program->program_keahlian)->count();
+                // if($kuota_pelimpahan_ketm > $pendaftar_ketm){
+                //     $status_kuota_ketm = "lebih";
+                //     $kelebihan_kuota_ketm = $kuota_pelimpahan_ketm - $pendaftar_ketm;
+                // } else {
+                //     $status_kuota_ketm = "kurang";
+                // }
+
+                // if ($status_kuota_mbk == "lebih" and $status_kuota_ketm == "kurang"){
+                //     $kuota_dilimpahkan = $kelebihan_kuota_mbk + $kuota_pelimpahan_ketm;
+                //         $data = ([
+                //             'kuota_pelimpahan' => $kuota_dilimpahkan,
+                //             'status_pelimpahan' => 1
+                //         ]);
+                //         Kuota::where('id', $kuota_ketm->id)
+                //         ->update($data);
+                //         $data = ([
+                //             'kuota_pelimpahan' => $pendaftar_mbk,
+                //             'status_pelimpahan' => 2
+                //         ]);
+                //         Kuota::where('id', $kuota_mbk->id)
+                //                 ->update($data);
+                //                 $melimpah++;;
+                // } else if ($status_kuota_ketm == "lebih" and $status_kuota_mbk == "kurang"){
+                //     $kuota_dilimpahkan = $kelebihan_kuota_ketm + $kuota_pelimpahan_mbk;
+                //         $data = ([
+                //             'kuota_pelimpahan' => $kuota_dilimpahkan,
+                //             'status_pelimpahan' => 1
+                //         ]);
+                //         Kuota::where('id', $kuota_mbk->id)
+                //         ->update($data);
+                //         $data = ([
+                //             'kuota_pelimpahan' => $pendaftar_ketm,
+                //             'status_pelimpahan' => 2
+                //         ]);
+                //         Kuota::where('id', $kuota_ketm->id)
+                //                 ->update($data);
+                //                 $melimpah++;;
+                // }                
+
+                $kuota_kna = Kuota::where('jalur', 'KEJUARAAN NON AKADEMIK')->where('program_keahlian', $program->program_keahlian)->first();
+                $kuota_pelimpahan_kna = $kuota_kna->kuota_pelimpahan;
+                $pendaftar_kna = Pendaftar::where('jalur', 'KEJUARAAN NON AKADEMIK')->where('pilihan_diterima', $program->program_keahlian)->count();
+                $cek_pendaftar_tidakditerima_kna = Pendaftar::where('jalur', 'KEJUARAAN NON AKADEMIK')->where('pilihan_diterima', '<>', $program->program_keahlian)
+                ->where('pilihan_1',$program->program_keahlian)->orwhere('pilihan_2',$program->program_keahlian)->where('jalur', 'KEJUARAAN NON AKADEMIK')->where('pilihan_diterima', 'Tidak Diterima')->count();
+                if($cek_pendaftar_tidakditerima_kna == 0){
+                    if($kuota_pelimpahan_kna > $pendaftar_kna){
+                        $status_kuota_kna = "lebih";
+                        $kelebihan_kuota_kna = $kuota_pelimpahan_kna - $pendaftar_kna;
                     } else {
-                    $status_kuota_anakguru = "kurang";
+                        $status_kuota_kna = "pas";
+                        $kelebihan_kuota_kna = 0;
                     }
-                }
-                $kuota_domisili = Kuota::where('jalur', 'DOMISILI TERDEKAT')->where('program_keahlian', $program->program_keahlian)->first();
-                $kuota_pelimpahan_domisili = $kuota_domisili->kuota_pelimpahan;
-                $pendaftar_domisili = Pendaftar::where('jalur', 'DOMISILI TERDEKAT')->where('pilihan_diterima', $program->program_keahlian)->count();
-                if($kuota_pelimpahan_domisili > $pendaftar_domisili){
-                    $status_kuota_domisili = "lebih";
-                    $kelebihan_kuota_domisili = $kuota_pelimpahan_domisili - $pendaftar_domisili;                
                 } else {
-                    $cek_pendaftar_tidakditerima_domisili = Pendaftar::where('jalur', 'DOMISILI TERDEKAT')->where('pilihan_diterima', '<>', $program->program_keahlian)
-                                                    ->where('pilihan_1',$program->program_keahlian)->orwhere('pilihan_2',$program->program_keahlian)->where('jalur', 'DOMISILI TERDEKAT')->where('pilihan_diterima', 'Tidak Diterima')->count();
-                    if($cek_pendaftar_tidakditerima_domisili == 0){
-                    $status_kuota_domisili = "pas";
-                    } else {
-                    $status_kuota_domisili = "kurang";
-                    }
+                    $status_kuota_kna = "kurang";
+                    $kelebihan_kuota_kna = 0;
                 }
-                if ($status_kuota_mutasi == "lebih"){
-                    if($status_kuota_anakguru == "lebih" or $status_kuota_anakguru == "pas"){
-                        if($status_kuota_domisili == "kurang"){
-                            $kuota_dilimpahkan = $kelebihan_kuota_mutasi + $kelebihan_kuota_anakguru + $kuota_pelimpahan_domisili;
+
+                $kuota_kepemimpinan = Kuota::where('jalur', 'KEPEMIMPINAN')->where('program_keahlian', $program->program_keahlian)->first();
+                $kuota_pelimpahan_kepemimpinan = $kuota_kepemimpinan->kuota_pelimpahan;
+                $pendaftar_kepemimpinan = Pendaftar::where('jalur', 'KEPEMIMPINAN')->where('pilihan_diterima', $program->program_keahlian)->count();
+                $cek_pendaftar_tidakditerima_kepemimpinan = Pendaftar::where('jalur', 'KEPEMIMPINAN')->where('pilihan_diterima', '<>', $program->program_keahlian)
+                ->where('pilihan_1',$program->program_keahlian)->orwhere('pilihan_2',$program->program_keahlian)->where('jalur', 'KEPEMIMPINAN')->where('pilihan_diterima', 'Tidak Diterima')->count();
+                if($cek_pendaftar_tidakditerima_kepemimpinan == 0){
+                    if($kuota_pelimpahan_kepemimpinan > $pendaftar_kepemimpinan){
+                        $status_kuota_kepemimpinan = "lebih";
+                        $kelebihan_kuota_kepemimpinan = $kuota_pelimpahan_kepemimpinan - $pendaftar_kepemimpinan;
+                    } else {
+                        $status_kuota_kepemimpinan = "pas";
+                        $kelebihan_kuota_kepemimpinan = 0;
+                    }
+                } else {
+                    $status_kuota_kepemimpinan = "kurang";
+                    $kelebihan_kuota_kepemimpinan = 0;
+                }
+
+                $kuota_akademik = Kuota::where('jalur', 'KEJUARAAN AKADEMIK')->where('program_keahlian', $program->program_keahlian)->first();
+                $kuota_pelimpahan_akademik = $kuota_akademik->kuota_pelimpahan;
+                $pendaftar_akademik = Pendaftar::where('jalur', 'KEJUARAAN AKADEMIK')->where('pilihan_diterima', $program->program_keahlian)->count();
+                $cek_pendaftar_tidakditerima_akademik = Pendaftar::where('jalur', 'KEJUARAAN AKADEMIK')->where('pilihan_diterima', '<>', $program->program_keahlian)
+                ->where('pilihan_1',$program->program_keahlian)->orwhere('pilihan_2',$program->program_keahlian)->where('jalur', 'KEJUARAAN AKADEMIK')->where('pilihan_diterima', 'Tidak Diterima')->count();
+                if($cek_pendaftar_tidakditerima_akademik == 0){
+                    if($kuota_pelimpahan_akademik > $pendaftar_akademik){
+                        $status_kuota_akademik = "lebih";
+                        $kelebihan_kuota_akademik = $kuota_pelimpahan_akademik - $pendaftar_akademik;
+                    } else {
+                        $status_kuota_akademik = "pas";
+                        $kelebihan_kuota_akademik = 0;
+                    } 
+                } else {
+                    $status_kuota_akademik = "kurang";
+                    $kelebihan_kuota_akademik = 0;
+                }
+
+                $kuota_rapor = Kuota::where('jalur', 'PRESTASI NILAI RAPOR')->where('program_keahlian', $program->program_keahlian)->first();
+                $kuota_pelimpahan_rapor = $kuota_rapor->kuota_pelimpahan;
+
+                if ($status_kuota_kna == "lebih" and $status_kuota_kepemimpinan == "kurang"){
+                    $kuota_dilimpahkan = $kelebihan_kuota_kna + $kuota_pelimpahan_kepemimpinan;
+                        $data = ([
+                            'kuota_pelimpahan' => $kuota_dilimpahkan,
+                            'status_pelimpahan' => 1
+                        ]);
+                        Kuota::where('id', $kuota_kepemimpinan->id)
+                        ->update($data);
+                        $data = ([
+                            'kuota_pelimpahan' => $pendaftar_kna,
+                            'status_pelimpahan' => 2
+                        ]);
+                        Kuota::where('id', $kuota_kna->id)
+                                ->update($data);
+                                $melimpah++;;
+                } else if ($status_kuota_kepemimpinan == "lebih" and $status_kuota_kna == "kurang"){
+                    $kuota_dilimpahkan = $kelebihan_kuota_kepemimpinan + $kuota_pelimpahan_kna;
+                        $data = ([
+                            'kuota_pelimpahan' => $kuota_dilimpahkan,
+                            'status_pelimpahan' => 1
+                        ]);
+                        Kuota::where('id', $kuota_kna->id)
+                        ->update($data);
+                        $data = ([
+                            'kuota_pelimpahan' => $pendaftar_kepemimpinan,
+                            'status_pelimpahan' => 2
+                        ]);
+                        Kuota::where('id', $kuota_kepemimpinan->id)
+                                ->update($data);
+                                $melimpah++;;
+                } else if ($status_kuota_kepemimpinan == "lebih" or $status_kuota_kna == "lebih"){
+                    $kuota_dilimpahkan = $kelebihan_kuota_kna + $kelebihan_kuota_kepemimpinan + $kuota_pelimpahan_rapor;
+                    $kuota_pelimpahan_rapor = $kuota_dilimpahkan;
+                        $data = ([
+                            'kuota_pelimpahan' => $kuota_dilimpahkan,
+                            'status_pelimpahan' => 1
+                        ]);
+                        Kuota::where('id', $kuota_rapor->id)
+                        ->update($data);
+                        $data = ([
+                            'kuota_pelimpahan' => $pendaftar_kepemimpinan,
+                            'status_pelimpahan' => 2
+                        ]);
+                        Kuota::where('id', $kuota_kepemimpinan->id)
+                                ->update($data);
+                        $data = ([
+                            'kuota_pelimpahan' => $pendaftar_kna,
+                            'status_pelimpahan' => 2
+                        ]);
+                        Kuota::where('id', $kuota_kna->id)
+                                ->update($data);
+                                $melimpah++;;
+                }
+                if ($status_kuota_akademik == "lebih"){
+                        $kuota_dilimpahkan = $kelebihan_kuota_akademik + $kuota_pelimpahan_rapor;
                             $data = ([
                                 'kuota_pelimpahan' => $kuota_dilimpahkan,
                                 'status_pelimpahan' => 1
                             ]);
-                            Kuota::where('id', $kuota_domisili->id)
-                                    ->update($data);
+                            Kuota::where('id', $kuota_rapor->id)
+                            ->update($data);
                             $data = ([
-                                'kuota_pelimpahan' => $pendaftar_mutasi,
+                                'kuota_pelimpahan' => $pendaftar_akademik,
                                 'status_pelimpahan' => 2
                             ]);
-                            Kuota::where('id', $kuota_mutasi->id)
-                                    ->update($data);
-                                    $data = ([
-                                'kuota_pelimpahan' => $pendaftar_anakguru,
-                                'status_pelimpahan' => 2
-                            ]);
-                            Kuota::where('id', $kuota_anakguru->id)
-                                    ->update($data);
-                            $melimpah++;
-                        }
-                    } else if($status_kuota_domisili == "lebih") {
-                        if($status_kuota_anakguru == "kurang"){
-                            $kuota_dilimpahkan = $kelebihan_kuota_mutasi + $kelebihan_kuota_domisili + $kuota_pelimpahan_anakguru;
-                            $data = ([
-                                'kuota_pelimpahan' => $kuota_dilimpahkan,
-                                'status_pelimpahan' => 1
-                            ]);
-                            Kuota::where('id', $kuota_anakguru->id)
-                                    ->update($data);
-                            $data = ([
-                                'kuota_pelimpahan' => $pendaftar_mutasi,
-                                'status_pelimpahan' => 2
-                            ]);
-                            Kuota::where('id', $kuota_mutasi->id)
-                                    ->update($data);
-                            $data = ([
-                                'kuota_pelimpahan' => $pendaftar_domisili,
-                                'status_pelimpahan' => 2
-                            ]);
-                            Kuota::where('id', $kuota_domisili->id)
+                            Kuota::where('id', $kuota_akademik->id)
                                     ->update($data);
                                     $melimpah++;;
-                        }
-                    } else if($status_kuota_anakguru == "kurang"){
-                        $kuota_dilimpahkan = $kelebihan_kuota_mutasi + $kuota_pelimpahan_anakguru;
-                        $data = ([
-                            'kuota_pelimpahan' => $kuota_dilimpahkan,
-                            'status_pelimpahan' => 1
-                        ]);
-                        Kuota::where('id', $kuota_anakguru->id)
-                        ->update($data);
-                        $data = ([
-                            'kuota_pelimpahan' => $pendaftar_mutasi,
-                            'status_pelimpahan' => 2
-                        ]);
-                        Kuota::where('id', $kuota_mutasi->id)
-                                ->update($data);
-                                $melimpah++;;                        
-                    }
-                } else if ($status_kuota_anakguru == "lebih"){
-                    if($status_kuota_mutasi == "kurang"){
-                        $kuota_dilimpahkan = $kelebihan_kuota_anakguru + $kuota_pelimpahan_mutasi;
-                        $data = ([
-                            'kuota_pelimpahan' => $kuota_dilimpahkan,
-                            'status_pelimpahan' => 1
-                        ]);
-                        Kuota::where('id', $kuota_mutasi->id)
-                        ->update($data);
-                        $data = ([
-                            'kuota_pelimpahan' => $pendaftar_anakguru,
-                            'status_pelimpahan' => 2
-                        ]);
-                        Kuota::where('id', $kuota_anakguru->id)
-                                ->update($data);
-                                $melimpah++;;  
-                    } else if ($status_kuota_domisili == "kurang"){
-                        $kuota_dilimpahkan = $kelebihan_kuota_anakguru + $kuota_pelimpahan_domisili;
-                        $data = ([
-                            'kuota_pelimpahan' => $kuota_dilimpahkan,
-                            'status_pelimpahan' => 1
-                        ]);
-                        Kuota::where('id', $kuota_domisili->id)
-                        ->update($data);
-                        $data = ([
-                            'kuota_pelimpahan' => $pendaftar_anakguru,
-                            'status_pelimpahan' => 2
-                        ]);
-                        Kuota::where('id', $kuota_anakguru->id)
-                                ->update($data);
-                                $melimpah++;;  
-                    }
-                }
-
-                $kuota_mbk = Kuota::where('jalur', 'MURID BERKEBUTUHAN KHUSUS')->where('program_keahlian', $program->program_keahlian)->first();
-                $kuota_pelimpahan_mbk = $kuota_mbk->kuota_pelimpahan;
-                $pendaftar_mbk = Pendaftar::where('jalur', 'MURID BERKEBUTUHAN KHUSUS')->where('pilihan_diterima', $program->program_keahlian)->count();
-                if($kuota_pelimpahan_mbk > $pendaftar_mbk){
-                    $status_kuota_mbk = "lebih";
-                    $kelebihan_kuota_mbk = $kuota_pelimpahan_mbk - $pendaftar_mbk;
-                } else {
-                    $status_kuota_mbk = "kurang";
-                }
-
-                $kuota_ketm = Kuota::where('jalur', 'KETM')->where('program_keahlian', $program->program_keahlian)->first();
-                $kuota_pelimpahan_ketm = $kuota_ketm->kuota_pelimpahan;
-                $pendaftar_ketm = Pendaftar::where('jalur', 'KETM')->where('pilihan_diterima', $program->program_keahlian)->count();
-                if($kuota_pelimpahan_ketm > $pendaftar_ketm){
-                    $status_kuota_ketm = "lebih";
-                    $kelebihan_kuota_ketm = $kuota_pelimpahan_ketm - $pendaftar_ketm;
-                } else {
-                    $status_kuota_ketm = "kurang";
-                }
-
-                if ($status_kuota_mbk == "lebih" and $status_kuota_ketm == "kurang"){
-                    $kuota_dilimpahkan = $kelebihan_kuota_mbk + $kuota_pelimpahan_ketm;
-                        $data = ([
-                            'kuota_pelimpahan' => $kuota_dilimpahkan,
-                            'status_pelimpahan' => 1
-                        ]);
-                        Kuota::where('id', $kuota_ketm->id)
-                        ->update($data);
-                        $data = ([
-                            'kuota_pelimpahan' => $pendaftar_mbk,
-                            'status_pelimpahan' => 2
-                        ]);
-                        Kuota::where('id', $kuota_mbk->id)
-                                ->update($data);
-                                $melimpah++;;
-                } else if ($status_kuota_ketm == "lebih" and $status_kuota_mbk == "kurang"){
-                    $kuota_dilimpahkan = $kelebihan_kuota_ketm + $kuota_pelimpahan_mbk;
-                        $data = ([
-                            'kuota_pelimpahan' => $kuota_dilimpahkan,
-                            'status_pelimpahan' => 1
-                        ]);
-                        Kuota::where('id', $kuota_mbk->id)
-                        ->update($data);
-                        $data = ([
-                            'kuota_pelimpahan' => $pendaftar_ketm,
-                            'status_pelimpahan' => 2
-                        ]);
-                        Kuota::where('id', $kuota_ketm->id)
-                                ->update($data);
-                                $melimpah++;;
-                }                
+                } 
+                $updatepelimpahan++;
+                $pelimpahan = $melimpah;
             }
-            $updatepelimpahan++;
-            $pelimpahan = $melimpah;
         }
                     
-        return redirect()->back()->with('success', $update . ' Proses seleksi telah dilakukan, dan '. $updatepelimpahan . ' Proses pelimpahan telah dilakukan ');
+        return redirect()->back()->with('success', $update . ' Proses seleksi telah dilakukan, '. $updatepelimpahan . ' Proses pelimpahan telah dilakukan');
     }
 
     /**
@@ -317,8 +444,9 @@ class PendaftarController extends Controller
                     $nama = $sheet->getCell('R'.$i)->getValue();
                     $asal_sekolah = $sheet->getCell('S'.$i)->getValue();
                     $pil_1 = $sheet->getCell('T'.$i)->getValue();
-                    $pil_2 = $sheet->getCell('V'.$i)->getValue();
-                    $pil_3 = $sheet->getCell('X'.$i)->getValue();
+                    $pil_2 = $sheet->getCell('U'.$i)->getValue();
+                    $pil_3 = "";
+                    // $pil_3 = $sheet->getCell('X'.$i)->getValue();
                     $p_1 = explode(" - ", $pil_1);
                     $p_2 = explode(" - ", $pil_2);
                     $p_3 = explode(" - ", $pil_3);
@@ -372,17 +500,18 @@ class PendaftarController extends Controller
                                                 // } else {
                                                     //     $skor_pilihan_3 = 0;
                     // }
-                    $tempat_lahir = $sheet->getCell('AA'.$i)->getValue();
-                    $tanggal_lahir = $sheet->getCell('AB'.$i)->getValue();
-                    $skor_pilihan_1 = $sheet->getCell('U'.$i)->getValue();
+                    $tempat_lahir = $sheet->getCell('X'.$i)->getValue();
+                    $tanggal_lahir = $sheet->getCell('Y'.$i)->getValue();
+                    $skor_pilihan_1 = $sheet->getCell('V'.$i)->getValue();
                     if($skor_pilihan_1 == ""){
                         $skor_pilihan_1 = 0;
                     }
-                    $skor_pilihan_2 = $sheet->getCell('W'.$i)->getValue();
+                    $skor_pilihan_2 = $sheet->getCell('V'.$i)->getValue();
                     if($skor_pilihan_2 == ""){
                         $skor_pilihan_2 = 0;
                     }
-                    $skor_pilihan_3 = $sheet->getCell('Y'.$i)->getValue();
+                    $skor_pilihan_3 = "";
+                    // $skor_pilihan_3 = $sheet->getCell('V'.$i)->getValue();
                     if($skor_pilihan_3 == ""){
                         $skor_pilihan_3 = 0;
                     }
